@@ -6,6 +6,7 @@ from os import listdir, path, makedirs
 from PIL import Image, ImageFont, ImageDraw
 import config
 from glob import glob
+from shutil import rmtree
 
 
 def main():
@@ -14,8 +15,8 @@ def main():
         "typetogether-tabletgothic-bold-tabular.ttf", config.fontsize
     )
 
-    if not path.exists(config.image_dir):
-        makedirs(config.image_dir)
+    rmtree(config.image_dir)
+    makedirs(config.image_dir)
 
     files = sorted(glob(path.join(config.download_dir, "*.png")))
 

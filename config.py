@@ -4,7 +4,8 @@ download_dir = path.join(path.dirname(path.realpath(__file__)), "download")
 image_dir = path.join(path.dirname(path.realpath(__file__)), "images")
 gif_file = path.join(path.dirname(path.realpath(__file__)), "out.gif")
 
-zoom = 1
+# zoom is between 1 and 20
+zoom = 16
 
 year = 2020
 month = 1
