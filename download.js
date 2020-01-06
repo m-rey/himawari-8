@@ -7,7 +7,7 @@ const addMinutes = require('date-fns/addMinutes');
 const formatDate = require('date-fns/format');
 
 const limiter = new Bottleneck({
-  maxConcurrent: 5,
+  maxConcurrent: 7,
   minTime: 1000,
 });
 
@@ -58,6 +58,8 @@ async function downloadImage(nameString, filepath) {
   });
 }
 
+const wrappedDownloadImage = limiter.wrap(downloadImage);
+
 (async () => {
   const tasks = [];
   let currentDate = START_DATE;
@@ -76,13 +78,19 @@ async function downloadImage(nameString, filepath) {
     .filter((d) => {
       return !fs.existsSync(d.filepath);
     })
-    .map(async (d) => {
-      return limiter.schedule(() => downloadImage(d.nameString, d.filepath));
+    .map((d) => {
+      return wrappedDownloadImage(d.nameString, d.filepath);
     });
 
   console.log(`downloading ${promises.length} items`);
 
-  const responses = await Promise.all(promises);
+  let responses = [];
+  try {
+    responses = await Promise.all(promises);
+    console.log('it worked');
+  } catch (error) {
+    console.log(error);
+  }
   const errorCount =
     responses.filter((d) => d === null || d === false).length || 0;
 
