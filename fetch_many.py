@@ -1,6 +1,8 @@
 import hi8fetch as hi8
 from os import path, makedirs
 import config
+import asyncio
+import aiohttp
 
 
 def strpad(i):
@@ -42,6 +44,7 @@ def main():
                 else:
                     print(namestr)
                     hi8.fetch(namestr, config.zoom, filename)
+
 
 if __name__ == "__main__":
     main()

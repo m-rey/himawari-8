@@ -54,6 +54,7 @@ def fetch(date, zoom, output):
         for y in range(scale):
             # print(str(x*scale+y+1) + " of " + str(scale*scale))
             path = pathfor(time, x, y)
+            print(path)
             # print("fetching %s" % (path))
             tiledata = sess.get(path).content
             tile = Image.open(BytesIO(tiledata))

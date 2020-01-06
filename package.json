@@ -1,0 +1,24 @@
+{
+  "name": "himawari-8",
+  "version": "1.0.0",
+  "description": "Gif from himawari satellite images",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZeitOnline/himawari-8.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ZeitOnline/himawari-8/issues"
+  },
+  "homepage": "https://github.com/ZeitOnline/himawari-8#readme",
+  "dependencies": {
+    "bottleneck": "^2.19.5",
+    "date-fns": "^2.8.1",
+    "himawari": "^1.3.2"
+  }
+}

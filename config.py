@@ -5,7 +5,7 @@ image_dir = path.join(path.dirname(path.realpath(__file__)), "images")
 gif_file = path.join(path.dirname(path.realpath(__file__)), "out.gif")
 
 # zoom is between 1 and 20
-zoom = 16
+zoom = 2
 
 year = 2020
 month = 1
