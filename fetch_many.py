@@ -1,25 +1,43 @@
 import hi8fetch as hi8
+from os import path, makedirs
+import config
+
 
 def strpad(i):
-	if i<10:
-		return '0'+str(i)
-	else:
-		return str(i)
+    if i < 10:
+        return "0" + str(i)
+    else:
+        return str(i)
 
-zoom 	= 1
 
-dir		= 'testz1/'
+if not path.exists(config.download_dir):
+    makedirs(config.download_dir)
 
-year	= 2015
-month	= 12
-days	= range(21,32)
-hours	= range(0,24)
-minutes	= [10*x for x in range(0,6)]
+for day in config.days:
+    for hour in config.hours:
+        for minute in config.minutes:
+            namestr = (
+                str(config.year)
+                + "-"
+                + strpad(config.month)
+                + "-"
+                + strpad(day)
+                + "T"
+                + strpad(hour)
+                + ":"
+                + strpad(minute)
+                + ":00"
+            )
+            filename = (
+                config.download_dir
+                + namestr.replace(":", "-")
+                + "_z"
+                + str(config.zoom)
+                + ".png"
+            )
+            if path.exists(filename):
+                print("{} already exists".format(namestr))
+            else:
+                print(namestr)
+                hi8.fetch(namestr, config.zoom, filename)
 
-for day in days:
-	for hour in hours:
-		for minute in minutes:
-			namestr = str(year)+'-'+strpad(month)+'-'+strpad(day)+'T'+strpad(hour)+':'+strpad(minute)+':00'
-			filename = dir+namestr.replace(':','-')+'_z'+str(zoom)+'.png'
-			print(namestr)
-			hi8.fetch(namestr,zoom,filename)
