@@ -5,7 +5,7 @@ from make_gif import main as make_gif
 
 
 def main():
-    fetch_many()
+    # fetch_many()
     interp()
     label_and_rename()
     make_gif()

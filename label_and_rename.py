@@ -18,7 +18,9 @@ def main():
     rmtree(config.image_dir)
     makedirs(config.image_dir)
 
-    files = sorted(glob(path.join(config.download_dir, "*.png")))
+    files = sorted(
+        glob(path.join(config.download_dir, "*.{}".format(config.file_extension)))
+    )
 
     for index, filepath in enumerate(files):
         filename = path.basename(filepath)
@@ -27,12 +29,22 @@ def main():
         draw = ImageDraw.Draw(im)
 
         # make text to draw on image
-        text = filename.replace("-00_z1.png", "").replace("T", " ")
-        text = text[:-3] + ":" + text[-2:]
+        text = filename.replace(
+            "-00_z{}.{}".format(config.zoom, config.file_extension), ""
+        ).replace("T", " ")
+        date = text.split(" ")[0].split("-")
+        date.reverse()
+        time = text.split(" ")[-1].split("-")
+        text = "{} {}".format(".".join(date), ":".join(time))
+        print(text)
 
         draw.text(config.text_position, text, "white", font=font)
 
-        im.save(config.image_dir + "/" + "image{:05d}.png".format(index + 1))
+        im.save(
+            config.image_dir
+            + "/"
+            + "image{:05d}.{}".format(index + 1, config.file_extension)
+        )
 
 
 if __name__ == "__main__":

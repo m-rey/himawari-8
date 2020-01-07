@@ -33,9 +33,9 @@ def main():
                         + strpad(hour)
                         + "-"
                     )
-                    filename30 = filenamebase + "30-00_z{}.png".format(config.zoom)
-                    filename40 = filenamebase + "40-00_z{}.png".format(config.zoom)
-                    filename50 = filenamebase + "50-00_z{}.png".format(config.zoom)
+                    filename30 = filenamebase + "30-00_z{}.{}".format(config.zoom, config.file_extension)
+                    filename40 = filenamebase + "40-00_z{}.{}".format(config.zoom, config.file_extension)
+                    filename50 = filenamebase + "50-00_z{}.{}".format(config.zoom, config.file_extension)
                     interp(filename30, filename50, filename40)
                     print("Fixed " + filename40)
 
