@@ -26,19 +26,31 @@ def main():
         filename = path.basename(filepath)
         print(filename)
         im = Image.open(filepath)
-        draw = ImageDraw.Draw(im)
+        if config.output_crop:
+            im = im.crop(config.output_crop)
+        im = im.resize(config.output_size, Image.LANCZOS)
+        # draw = ImageDraw.Draw(im)
 
-        # make text to draw on image
-        text = filename.replace(
-            "-00_z{}.{}".format(config.zoom, config.file_extension), ""
-        ).replace("T", " ")
-        date = text.split(" ")[0].split("-")
-        date.reverse()
-        time = text.split(" ")[-1].split("-")
-        text = "{} {}".format(".".join(date), ":".join(time))
-        print(text)
+        # # make text to draw on image
+        # text = filename.replace(
+        #     "-00_z{}.{}".format(config.zoom, config.file_extension), ""
+        # ).replace("T", " ")
+        # date = text.split(" ")[0].split("-")
+        # date.reverse()
+        # time = text.split(" ")[-1].split("-")
+        # hours = int(time[0])
 
-        draw.text(config.text_position, text, "white", font=font)
+        # hours += config.time_difference_hours
+        # if hours > 23:
+        #     hours -= 23
+        #     date[0] = "{:02d}".format(int(date[0]) + 1)
+
+        # time[0] = "{:02d}".format(hours)
+
+        # text = "{} {}".format(".".join(date), ":".join(time))
+        # print(text)
+
+        # draw.text(config.text_position, text, "white", font=font)
 
         im.save(
             config.image_dir

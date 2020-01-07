@@ -1,7 +1,6 @@
 const himawari = require('himawari');
 const path = require('path');
 const fs = require('fs');
-const range = require('./utils/range.js');
 const Bottleneck = require('bottleneck');
 const addMinutes = require('date-fns/addMinutes');
 const formatDate = require('date-fns/format');
@@ -13,20 +12,11 @@ const limiter = new Bottleneck({
 
 const ZOOM = 4;
 const START_DATE = new Date(2019, 11, 1);
-const END_DATE = new Date(2020, 0, 6);
+const END_DATE = new Date(2020, 0, 7);
 
-// const BASEPATH = path.join(__dirname, "download")
+// const BASEPATH = path.join(__dirname, 'download');
 const BASEPATH = '/Volumes/Time Machine/himawari';
 
-function getNameString(year, month, day, hour, minute) {
-  return `${year}-${month
-    .toString()
-    .padStart(2, '0')}-${day
-    .toString()
-    .padStart(2, '0')}T${hour
-    .toString()
-    .padStart(2, '0')}:${minute.toString().padStart(2, '0')}:00`;
-}
 function getFilepath(nameString) {
   return path.join(
     BASEPATH,
@@ -34,7 +24,17 @@ function getFilepath(nameString) {
   );
 }
 
-async function downloadImage(nameString, filepath) {
+let stats = {
+  total: 0,
+  downloaded: 0,
+};
+
+function getIndex() {
+  stats.downloaded += 1;
+  return stats;
+}
+
+async function downloadImage({nameString, filepath}) {
   return new Promise(function(resolve, reject) {
     if (fs.existsSync(filepath)) {
       return resolve(true);
@@ -47,11 +47,13 @@ async function downloadImage(nameString, filepath) {
       parallel: true,
       //   debug: true,
       success: () => {
-        console.log(`downloaded ${nameString}`);
+        const {total, downloaded} = getIndex();
+        console.log(`downloaded ${nameString} (${downloaded}/${total})`);
         resolve(true);
       },
       error: () => {
-        console.log(`error downloading ${nameString}`);
+        const {total, downloaded} = getIndex();
+        console.log(`error downloading ${nameString} (${downloaded}/${total})`);
         reject(false);
       },
     });
@@ -79,8 +81,10 @@ const wrappedDownloadImage = limiter.wrap(downloadImage);
       return !fs.existsSync(d.filepath);
     })
     .map((d) => {
-      return wrappedDownloadImage(d.nameString, d.filepath);
+      return wrappedDownloadImage(d);
     });
+
+  stats.total = promises.length;
 
   console.log(`downloading ${promises.length} items`);
 
