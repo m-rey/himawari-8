@@ -12,7 +12,7 @@ const limiter = new Bottleneck({
 
 const ZOOM = 4;
 const START_DATE = new Date(2019, 11, 1);
-const END_DATE = new Date(2020, 0, 7);
+const END_DATE = new Date(2020, 0, 9);
 
 // const BASEPATH = path.join(__dirname, 'download');
 const BASEPATH = '/Volumes/Time Machine/himawari';

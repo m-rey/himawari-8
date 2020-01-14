@@ -39,43 +39,27 @@ def main():
     # print(stderr)
     # print("wrote gif to {}".format(config.gif_file))
 
-    # generate video
-    # args = shlex.split(
-    #     'ffmpeg -v warning -f image2 -framerate {source_fps} -i {image_dir}/image%05d.{file_extension} -vf "{filters}" -y {gif_file}'.format_map(
-    #         {
-    #             "image_dir": config.image_dir,
-    #             "filters": config.filters,
-    #             "palette_file": config.palette_file,
-    #             "gif_file": config.gif_file,
-    #             "file_extension": config.file_extension,
-    #             "source_fps": config.source_fps,
-    #         }
-    #     )
-    # )
-
-    # process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # stdout, stderr = process.communicate()
-    # print(stderr)
-    # print("wrote gif to {}".format(config.gif_file))
-
-    for index, filters in enumerate(config.filters_test):
-        print(index)
-        filename = "out-{}-{}-{}.mp4".format(config.source_fps, config.output_fps, index)
+    for v in config.video_settings:
+        print(v["filename"])
         args = shlex.split(
-            'ffmpeg -v warning -f image2 -framerate {source_fps} -i {image_dir}/image%05d.{file_extension} -vf "{filters}" -y {gif_file}'.format_map(
+            'ffmpeg -v warning -f image2 -framerate {source_fps} -i {image_dir}/image%05d.{file_extension} {arguments} -vf "{filters}" -y {filename}'.format_map(
                 {
                     "image_dir": config.image_dir,
-                    "filters": filters,
+                    "quality": config.quality,
+                    "filters": v["filters"],
+                    "arguments": v["arguments"],
                     "palette_file": config.palette_file,
-                    "gif_file": filename,
                     "file_extension": config.file_extension,
-                    "source_fps": config.source_fps,
+                    "filename": v["filename"],
+                    "source_fps": v["source_fps"],
                 }
             )
         )
+        print(args)
 
         process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
+        print(stderr)
 
 
 if __name__ == "__main__":
